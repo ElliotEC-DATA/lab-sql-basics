@@ -125,13 +125,46 @@ group by type;
 
 -- 20
 
-select account_id, sum(amount)
+select account_id, 
+
+floor(sum(
+case
+when type = 'VYDAJ' then amount
+end )) as 'incoming',
+
+floor(sum(
+case
+when type = 'PRIJEM' then amount
+end )) as 'outgoing',
+
+(floor(sum(
+case
+when type = 'VYDAJ' then amount
+end )) - floor(sum(
+case
+when type = 'PRIJEM' then amount
+end ))) as 'difference'
+
+from trans
+where account_id = 396
+group by account_id;
+
+-- 21 I got the minus, is it normal ?
+
+select * from trans;
+
+select account_id, 
 
 
+(floor(sum(
+case
+when type = 'VYDAJ' then amount
+end )) - floor(sum(
+case
+when type = 'PRIJEM' then amount
+end ))) as 'difference'
 
-
-
-
-
-
+from trans
+group by account_id
+order by difference asc;
 
